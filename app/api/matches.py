@@ -45,6 +45,8 @@ def unmatch(
     db.commit()
 
     return {"message": "Successfully unmatched"}
+
+
 def get_matched_profiles(
         current_user: UserInDB = Depends(get_current_user),
         db: Session = Depends(get_db),
