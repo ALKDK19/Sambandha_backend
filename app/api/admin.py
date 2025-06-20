@@ -116,8 +116,6 @@ def update_admin(
     if admin_update.full_name:
         current_admin.full_name = admin_update.full_name
 
-    # Remove role update logic
-
     db.commit()
     db.refresh(current_admin)
     return current_admin
