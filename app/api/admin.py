@@ -43,8 +43,8 @@ def register_admin(
         email=admin.email,
         full_name=admin.full_name,
         password_hash=hashed_password
-        # role removed
     )
+
     db.add(new_admin)
     db.commit()
     db.refresh(new_admin)
