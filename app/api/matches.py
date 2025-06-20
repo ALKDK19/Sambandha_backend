@@ -45,3 +45,26 @@ def unmatch(
     db.commit()
 
     return {"message": "Successfully unmatched"}
+def get_matched_profiles(
+        current_user: UserInDB = Depends(get_current_user),
+        db: Session = Depends(get_db),
+        limit: int = 10,
+        offset: int = 0
+):
+    """
+    Get profiles of users matched with the current user.
+    """
+    matches = db.query(Match).filter(
+        ((Match.user1_id == current_user.user_id) | (Match.user2_id == current_user.user_id)),
+        Match.match_status == 'active'
+    ).offset(offset).limit(limit).all()
+
+    matched_user_ids = []
+    for match in matches:
+        if match.user1_id == current_user.user_id:
+            matched_user_ids.append(match.user2_id)
+        else:
+            matched_user_ids.append(match.user1_id)
+
+    profiles = db.query(Profile).filter(Profile.user_id.in_(matched_user_ids)).all()
+    return profiles
