@@ -55,6 +55,7 @@ class ChatBase(BaseSchema):
     match_id: Optional[int] = None
     initiator_user_id: int
     receiver_user_id: int
+    state: str = "request"  # 'request', 'active'
 
 class ChatCreate(ChatBase):
     pass

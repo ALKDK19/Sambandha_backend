@@ -13,8 +13,9 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.drop_column('admin', 'role')
+    op.add_column('chats', sa.Column('state', sa.String(), nullable=False, server_default='request'))
+    op.alter_column('chats', 'state', server_default=None)
 
 
 def downgrade() -> None:
-    op.add_column('admin', sa.Column('role', sa.String(length=50), nullable=True))
+    op.drop_column('chats', 'state')

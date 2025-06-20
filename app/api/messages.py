@@ -39,6 +39,29 @@ def create_message(
     if blocked:
         raise HTTPException(status_code=403, detail="Cannot message blocked user")
 
+    # Only allow 1-2 messages if chat.state == 'request' and recipient hasn't replied
+    if chat.state == 'request':
+        # Count messages sent by current user in this chat
+        sent_count = db.query(Message).filter(
+            Message.chat_id == chat.chat_id,
+            Message.sender_user_id == current_user.user_id
+        ).count()
+        # Check if recipient has replied
+        recipient_replied = db.query(Message).filter(
+            Message.chat_id == chat.chat_id,
+            Message.sender_user_id == message.receiver_user_id
+        ).count() > 0
+        if not recipient_replied and sent_count >= 2:
+            raise HTTPException(status_code=403, detail="You can only send 2 messages until the recipient replies or you are matched.")
+        # If recipient replied, unlock chat
+        if recipient_replied:
+            chat.state = 'active'
+            db.commit()
+    # If chat is linked to a match, unlock chat
+    if chat.match_id is not None and chat.state != 'active':
+        chat.state = 'active'
+        db.commit()
+
     # Create message
     new_message = Message(
         chat_id=message.chat_id,

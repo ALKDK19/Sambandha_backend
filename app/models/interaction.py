@@ -49,6 +49,7 @@ class Chat(Base):
     match_id = Column(Integer, ForeignKey("matches.match_id"), nullable=True)
     initiator_user_id = Column(Integer, ForeignKey("users.user_id"))
     receiver_user_id = Column(Integer, ForeignKey("users.user_id"))
+    state = Column(String, default='request')  # 'request', 'active'
 
     # Relationships
     match = relationship("Match", back_populates="chats")
