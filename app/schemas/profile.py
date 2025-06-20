@@ -83,7 +83,3 @@ class ProfileSummary(BaseSchema):
     profession_text: Optional[str] = None
     primary_profile_image_url: Optional[str] = None
     profile_completion_percentage: int = 0
-
-
-    class Config:
-        orm_mode = True
