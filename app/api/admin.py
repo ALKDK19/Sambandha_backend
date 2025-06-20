@@ -13,7 +13,7 @@ from app.database import get_db
 from utils.security import (
     get_admin_password_hash, verify_admin_password,
     create_admin_access_token, get_current_admin,
-    get_current_active_admin, get_current_super_admin
+    get_current_active_admin,
 )
 from app.config import settings
 
@@ -23,8 +23,7 @@ router = APIRouter()
 @router.post("/register", response_model=AdminInDB)
 def register_admin(
         admin: AdminCreate,
-        db: Session = Depends(get_db),
-        current_admin: dict = Depends(get_current_super_admin)
+        db: Session = Depends(get_db)
 ):
     # Check if admin already exists
     db_admin = db.query(Admin).filter(
@@ -43,8 +42,8 @@ def register_admin(
         username=admin.username,
         email=admin.email,
         full_name=admin.full_name,
-        password_hash=hashed_password,
-        role=admin.role
+        password_hash=hashed_password
+        # role removed
     )
     db.add(new_admin)
     db.commit()
@@ -117,8 +116,7 @@ def update_admin(
     if admin_update.full_name:
         current_admin.full_name = admin_update.full_name
 
-    if admin_update.role and current_admin.role == "super_admin":
-        current_admin.role = admin_update.role
+    # Remove role update logic
 
     db.commit()
     db.refresh(current_admin)

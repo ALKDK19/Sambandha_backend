@@ -128,16 +128,6 @@ async def get_current_active_admin(
     return current_admin
 
 
-async def get_current_super_admin(
-        current_admin: Admin = Depends(get_current_active_admin)
-) -> Admin:
-    if current_admin.role != "super_admin":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Super admin privileges required"
-        )
-    return current_admin
-
 
 # --------------------------
 # Password Verification

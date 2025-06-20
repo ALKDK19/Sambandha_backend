@@ -1,10 +1,4 @@
-"""drop users table
 
-Revision ID: b99da7df9f29
-Revises: 
-Create Date: 2025-06-15 19:15:45.003748
-
-"""
 from typing import Sequence, Union
 
 from alembic import op
@@ -19,7 +13,8 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    pass
+    op.drop_column('admin', 'role')
+
 
 def downgrade() -> None:
-    pass
+    op.add_column('admin', sa.Column('role', sa.String(length=50), nullable=True))

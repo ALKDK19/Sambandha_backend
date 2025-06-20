@@ -11,6 +11,5 @@ class Admin(Base):
     password_hash = Column(String)
     email = Column(String, unique=True)
     full_name = Column(String)
-    role = Column(String, default='admin')  # 'super_admin', 'moderator'
     last_login = Column(TIMESTAMP(timezone=True), nullable=True)
     is_active = Column(Boolean, default=True)

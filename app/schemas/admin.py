@@ -8,7 +8,6 @@ class AdminBase(BaseSchema):
     username: str
     email: EmailStr
     full_name: str
-    role: str = "admin"
 
 class AdminCreate(AdminBase):
     password: str
